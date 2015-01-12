@@ -1,7 +1,6 @@
 package kotlin.io
 
 import java.io.*
-import java.util.*
 
 /**
  * Create an empty directory in the specified directory, using the given prefix and suffix to generate its name.
@@ -157,7 +156,7 @@ public fun File.relativeTo(base: File): String {
     val separator = File.separator.charAt(0)
     val ups = if (baseSuffix.isEmpty()) 0 else baseSuffix.count { it == separator } + 1
     val result = StringBuilder()
-    for (i in 1 .. ups) {
+    for (i in 1..ups) {
         if (i != 1) {
             result.append(separator)
         }
@@ -211,10 +210,12 @@ public fun File.copyTo(dst: File, overwrite: Boolean = false, bufferSize: Int = 
     } else if (dst.exists()) {
         if (!overwrite) {
             throw FileAlreadyExistsException(file = this.toString(),
-                    other = dst.toString(), reason = "The destination file already exists")
+                                             other = dst.toString(),
+                                             reason = "The destination file already exists")
         } else if (dst.isDirectory() && dst.listFiles().any()) {
             throw DirectoryNotEmptyException(file = this.toString(),
-                    other = dst.toString(), reason = "The destination file is a non-empty directory")
+                                             other = dst.toString(),
+                                             reason = "The destination file is a non-empty directory")
         }
     }
     dst.getParentFile().mkdirs()
@@ -260,8 +261,8 @@ public enum class OnErrorAction {
  */
 public fun File.copyRecursively(dst: File,
                                 onError: (File, IOException) -> OnErrorAction =
-                                {(file: File, e: IOException) -> throw e}
-): Boolean {
+                                {(file: File, e: IOException) -> throw e }
+                               ): Boolean {
     fun copy(src: File): OnErrorAction? {
         if (!src.exists()) {
             return onError(this, NoSuchFileException(file = toString(), reason = "The source file doesn't exist"))
@@ -269,8 +270,9 @@ public fun File.copyRecursively(dst: File,
         val relPath = src.relativeTo(this@copyRecursively)
         val dstFile = File(dst, relPath)
         if (dstFile.exists() && !(src.isDirectory() && dstFile.isDirectory())) {
-            return onError(dstFile, FileAlreadyExistsException(src.toString(), other = dstFile.toString(),
-                    reason = "The destination file already exists"))
+            return onError(dstFile, FileAlreadyExistsException(file = src.toString(),
+                                                               other = dstFile.toString(),
+                                                               reason = "The destination file already exists"))
         }
         try {
             if (src.isDirectory()) {
@@ -278,7 +280,7 @@ public fun File.copyRecursively(dst: File,
                 val children = src.listFiles()
                 if (children == null) {
                     return onError(src, AccessDeniedException(file = src.toString(),
-                            reason = "Cannot list files in a directory"))
+                                                              reason = "Cannot list files in a directory"))
                 }
                 for (child in children) {
                     val result = copy(child)

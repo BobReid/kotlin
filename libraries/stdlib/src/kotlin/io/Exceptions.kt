@@ -1,7 +1,6 @@
 package kotlin.io
 
 import java.io.IOException
-import java.io.File
 
 private fun constructMessage(file: String, other: String?, reason: String?): String {
     val sb = StringBuilder(file)
@@ -17,7 +16,7 @@ private fun constructMessage(file: String, other: String?, reason: String?): Str
 open public class FileSystemException(public val file: String,
                                       private val other: String? = null,
                                       public val reason: String? = null
-) : IOException(constructMessage(file, other, reason)) {
+                                     ) : IOException(constructMessage(file, other, reason)) {
     public val otherFile: String? = other
 }
 

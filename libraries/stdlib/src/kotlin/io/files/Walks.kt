@@ -95,7 +95,7 @@ public fun File.walkFileTree(fileVisitor: FileVisitor, maxDepth: Int? = null) {
                 val children = file.listFiles()
                 if (children == null) {
                     return fileVisitor.visitDirectoryFailed(file,
-                            AccessDeniedException(file = file.toString(), reason = "Cannot list files in a directory"))
+                                                            AccessDeniedException(file = file.toString(), reason = "Cannot list files in a directory"))
                 }
                 for (child in children) {
                     val childVisitResult = walk(child, depth + 1)
@@ -131,8 +131,8 @@ public fun File.walkFileTree(fileVisitor: FileVisitor, maxDepth: Int? = null) {
  * IllegalArgumentException - if `maxDepth` < 0
  */
 public fun File.walkSelectively(walkOrder: WalkOrder = WalkOrder.PARENTS_FIRST,
-                     maxDepth: Int? = null,
-                     block: (File) -> FileVisitResult) {
+                                maxDepth: Int? = null,
+                                block: (File) -> FileVisitResult) {
     val fileVisitor = object : AbstractFileVisitor() {
         override fun beforeVisitDirectory(dir: File): FileVisitResult {
             return when (walkOrder) {
@@ -177,8 +177,8 @@ public fun File.walkSelectively(walkOrder: WalkOrder = WalkOrder.PARENTS_FIRST,
  * IllegalArgumentException - if `maxDepth` < 0
  */
 public fun File.walkFileTree(walkOrder: WalkOrder = WalkOrder.PARENTS_FIRST,
-                        maxDepth: Int? = null,
-                        block: (File) -> Unit) {
+                             maxDepth: Int? = null,
+                             block: (File) -> Unit) {
     walkSelectively(walkOrder, maxDepth, {
         block(it)
         FileVisitResult.CONTINUE

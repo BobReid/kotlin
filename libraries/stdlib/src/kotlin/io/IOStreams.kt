@@ -7,7 +7,7 @@ import java.nio.charset.CharsetEncoder
 
 /** Returns an [Iterator] of bytes over an input stream */
 public fun InputStream.iterator(): ByteIterator =
-        object: ByteIterator() {
+        object : ByteIterator() {
             override fun hasNext(): Boolean = available() > 0
 
             public override fun nextByte(): Byte = read().toByte()
