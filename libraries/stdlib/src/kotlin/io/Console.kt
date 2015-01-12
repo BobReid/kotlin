@@ -109,7 +109,7 @@ public fun println(message: CharArray) {
     System.out.println(message)
 }
 
-/** Prints a newline t[[System.out]] */
+/** Prints a newline to [[System.out]] */
 public fun println() {
     System.out.println()
 }
